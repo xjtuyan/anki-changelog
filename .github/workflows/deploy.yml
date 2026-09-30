@@ -17,13 +17,30 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Anki-changying
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Upload Pages artifact (仅站点目录 Anki-changying)
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ./Anki-changying/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build VitePress
+        run: npm run docs:build
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./Anki-changying
+          path: ./Anki-changying/.vitepress/dist
 
   deploy:
     needs: build
