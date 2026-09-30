@@ -1,6 +1,4 @@
-![logo](https://cdn.jsdelivr.net/gh/twemoji/twemoji@14.0.2/assets/72x72/1f4d6.png)
-
-# Anki 卡片更新中心
+# 📖 Anki 卡片更新中心
 
 ## 牌组更新日志 · 勘误公告 · 一处查看
 
