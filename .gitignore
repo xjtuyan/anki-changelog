@@ -1,0 +1,15 @@
+# 项目记忆（含个人笔记，不进仓库）
+.workbuddy/
+
+# 系统/临时
+__pycache__/
+*.log
+.DS_Store
+Thumbs.db
+
+# 说明：vendor/ 必须进仓库（站点依赖本地 docsify，已本地化）
+# 不忽略 vendor
+
+# 本地预览启动器（仅本机用，含绝对路径，不进仓库）
+本地预览.bat
+本地预览.vbs

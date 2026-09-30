@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="Anki 牌组更新日志与勘误中心 —— 一处查看每一份牌组的迭代与修正">
+  <title>Anki 卡片更新中心</title>
+  <!-- docsify 主题（本地 vendor，不依赖外部 CDN，国内稳定） -->
+  <link rel="stylesheet" href="./vendor/vue.css">
+  <style>
+    :root {
+      /* 品牌红，呼应 Anki 配色 */
+      --theme-color: #c0392b;
+      --base-font-size: 15px;
+    }
+    .app-name-link { font-weight: 700; letter-spacing: .5px; }
+    .markdown-section { max-width: 880px; }
+    .markdown-section h1, .markdown-section h2 { border-bottom: 1px solid #eee; padding-bottom: .3em; }
+    /* 更新/勘误徽标 */
+    .tag { display:inline-block; padding:1px 8px; border-radius:10px; font-size:12px; color:#fff; vertical-align:middle; margin-left:6px; }
+    .tag-up { background:#27ae60; }
+    .tag-fix { background:#c0392b; }
+    .tag-deck { background:#2980b9; }
+    /* 封面按钮 */
+    .cover-main > a { border-color: var(--theme-color); color: var(--theme-color); }
+  </style>
+</head>
+<body>
+  <div id="app">正在加载…</div>
+
+  <script>
+    window.$docsify = {
+      name: 'Anki 卡片更新中心',
+      repo: '',                       // 可填你的 GitHub 仓库地址，右上角显示
+      homepage: 'README.md',
+      coverpage: true,                // 启用封面页
+      loadSidebar: true,              // 加载侧边栏导航
+      loadNavbar: true,               // 加载顶部导航
+      subMaxLevel: 3,                 // 侧边栏最多展开到 h3
+      auto2top: true,                 // 切换页面自动回顶
+      maxLevel: 4,
+      notFoundPage: true,
+      search: {
+        maxAge: 86400000,
+        paths: 'auto',
+        placeholder: '搜索更新 / 勘误…',
+        noData: '找不到结果',
+        depth: 4
+      },
+      pagination: {
+        previousText: '上一篇',
+        nextText: '下一篇',
+        crossChapter: true,
+        crossChapterText: true
+      },
+      copyCode: {
+        buttonText: '复制',
+        errorText: '复制失败',
+        successText: '已复制'
+      }
+    };
+  </script>
+
+  <!-- docsify 核心（本地 vendor） -->
+  <script src="./vendor/docsify.min.js"></script>
+  <!-- 全文搜索（中文可用） -->
+  <script src="./vendor/search.min.js"></script>
+  <!-- 上一篇/下一篇分页 -->
+  <script src="./vendor/docsify-pagination.min.js"></script>
+  <!-- 代码块一键复制 -->
+  <script src="./vendor/docsify-copy-code.min.js"></script>
+</body>
+</html>
