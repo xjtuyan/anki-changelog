@@ -1,4 +1,4 @@
-# Anki 卡片工坊
+<img src="./assets/logo.svg" alt="长缨记忆卡" width="220">
 
 ## 科学记忆，从一副好牌组开始
 
