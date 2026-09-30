@@ -1,5 +1,8 @@
 .workbuddy/
 
+# 旧版（docsify）站点已废弃，仅本地留档，绝不进仓库
+_trash_Anki-changying-vp/
+
 # 密钥/凭据类文件绝不进仓库(含 Cloudflare/GitHub token)
 *.txt
 秘钥.txt

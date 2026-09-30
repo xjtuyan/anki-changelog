@@ -12,24 +12,43 @@ hero:
     - theme: alt
       text: 关于长缨
       link: /about
-  image:
-    src: /nezha.png
-    alt: 哪吒手持红缨枪 · 长缨记忆卡
-
-features:
-  - icon: 🧠
-    title: 科学间隔重复
-    details: 每张卡按遗忘曲线排程，记忆效率倍增，告别背了就忘。
-  - icon: 🔄
-    title: 持续更新
-    details: 内容随考纲与用户反馈不断增补优化，买一次持续受益。
-  - icon: 🔍
-    title: 勘误透明
-    details: 已发布牌组的错误公开记录、可追溯，你手上的卡始终有准信。
-  - icon: 🔔
-    title: Anki 更新提醒
-    details: 安装插件后打开 Anki 自动提示牌组新版本与勘误，不用惦记。
 ---
+
+<section class="home-values">
+
+<div class="value-card">
+  <div class="value-meta">
+    <span class="value-icon">🧠</span>
+    <h3>科学间隔重复</h3>
+  </div>
+  <p>每张卡按遗忘曲线排程，记忆效率倍增，告别背了就忘。</p>
+</div>
+
+<div class="value-card">
+  <div class="value-meta">
+    <span class="value-icon">🔄</span>
+    <h3>持续更新</h3>
+  </div>
+  <p>内容随考纲与用户反馈不断增补优化，买一次持续受益。</p>
+</div>
+
+<div class="value-card">
+  <div class="value-meta">
+    <span class="value-icon">🔍</span>
+    <h3>勘误透明</h3>
+  </div>
+  <p>已发布牌组的错误公开记录、可追溯，你手上的卡始终有准信。</p>
+</div>
+
+<div class="value-card">
+  <div class="value-meta">
+    <span class="value-icon">🔔</span>
+    <h3>Anki 更新提醒</h3>
+  </div>
+  <p>安装插件后打开 Anki 自动提示牌组新版本与勘误，不用惦记。</p>
+</div>
+
+</section>
 
 ## 为什么选我们
 
@@ -38,7 +57,7 @@ features:
 ## 快速入口
 
 - 🛍️ [产品展示](/products) —— 顶部按品类筛选，点卡片进详情页
-- 🕒 [更新 & 勘误时间轴](/products) —— 每份牌组详情页内含，勘误以本站为准
+- 📣 [更新与勘误日志](/updatelogs) —— 全站改动按月归档、按科目筛选，每一条都留痕
 - 🔔 [Anki 更新提醒插件](/about) —— 打开 Anki 自动获取本站更新
 
-> 本站每次内容更新都会自动同步上线，无需你手动操作。淘宝 / 闲鱼购买的牌组，内容与本站不一致时以**勘误时间轴**为准。
+> 本站每次内容更新都会自动同步上线，无需你手动操作。淘宝 / 闲鱼购买的牌组，内容与本站不一致时以**勘误日志**为准。

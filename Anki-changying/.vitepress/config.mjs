@@ -23,11 +23,12 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: '产品展示', link: '/products' },
+      { text: '更新与勘误', link: '/updatelogs' },
       { text: '关于', link: '/about' },
     ],
     footer: {
       message: '长缨记忆卡 · 专业 Anki 牌组',
-      copyright: 'Copyright © 2026 闫兵广',
+      copyright: 'Copyright © 2026 长缨记忆卡',
     },
     lastUpdated: true,
     search: { provider: 'local' },
