@@ -1,1 +1,6 @@
 .workbuddy/
+
+# 密钥/凭据类文件绝不进仓库(含 Cloudflare/GitHub token)
+*.txt
+秘钥.txt
+密钥.txt
