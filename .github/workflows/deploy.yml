@@ -36,6 +36,9 @@ jobs:
 
       - name: Build VitePress
         run: npm run docs:build
+        env:
+          # GitHub Pages 项目站托管在 /anki-changelog/ 子路径，构建时切 base
+          DEPLOY_TARGET: gh
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
