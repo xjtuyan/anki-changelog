@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="Anki 牌组更新日志与勘误中心 —— 一处查看每一份牌组的迭代与修正">
-  <title>Anki 卡片更新中心</title>
+  <meta name="description" content="Anki 卡片工坊 —— 专业 Anki 牌组展示、更新日志与勘误中心。科学记忆，持续迭代，勘误透明。">
+  <title>Anki 卡片工坊 · 专业牌组与更新勘误中心</title>
   <!-- docsify 主题（本地 vendor，不依赖外部 CDN，国内稳定） -->
   <link rel="stylesheet" href="./vendor/vue.css">
   <style>
@@ -15,15 +15,28 @@
       --base-font-size: 15px;
     }
     .app-name-link { font-weight: 700; letter-spacing: .5px; }
-    .markdown-section { max-width: 880px; }
+    .markdown-section { max-width: 920px; }
     .markdown-section h1, .markdown-section h2 { border-bottom: 1px solid #eee; padding-bottom: .3em; }
-    /* 更新/勘误徽标 */
+    /* 更新/勘误/牌组 徽标 */
     .tag { display:inline-block; padding:1px 8px; border-radius:10px; font-size:12px; color:#fff; vertical-align:middle; margin-left:6px; }
     .tag-up { background:#27ae60; }
     .tag-fix { background:#c0392b; }
     .tag-deck { background:#2980b9; }
     /* 封面按钮 */
     .cover-main > a { border-color: var(--theme-color); color: var(--theme-color); }
+    /* 产品展示卡片 */
+    .deck-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin:18px 0 28px; }
+    .product-card { border:1px solid #eee; border-radius:10px; padding:16px; background:#fff; transition:.2s; }
+    .product-card:hover { box-shadow:0 4px 16px rgba(192,57,43,.12); border-color:var(--theme-color); }
+    .product-card h3 { margin:0 0 4px; color:var(--theme-color); font-size:18px; }
+    .product-card .meta { font-size:13px; color:#888; margin-bottom:8px; }
+    .product-card .desc { font-size:14px; color:#444; line-height:1.6; }
+    .product-card .actions { margin-top:12px; }
+    .product-card .actions a { display:inline-block; margin-right:12px; color:var(--theme-color); font-weight:600; text-decoration:none; }
+    .product-card .actions a:hover { text-decoration:underline; }
+    /* 首页价值点 */
+    .feature-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin:16px 0; }
+    .feature-row .f { border-left:3px solid var(--theme-color); padding:6px 12px; background:#fdf6f5; border-radius:0 8px 8px 0; }
   </style>
 </head>
 <body>
@@ -32,10 +45,10 @@
   <script>
     window.$docsify = {
       relativePath: true,             // 兼容 GitHub Pages / Cloudflare 子路径部署
-      name: 'Anki 卡片更新中心',
+      name: 'Anki 卡片工坊',           // ⚠️ 品牌名，按需替换
       repo: '',                       // 可填你的 GitHub 仓库地址，右上角显示
       homepage: 'README.md',
-      coverpage: true,                // 启用封面页
+      coverpage: true,                // 启用封面页（品牌 Hero）
       loadSidebar: true,              // 加载侧边栏导航
       loadNavbar: true,               // 加载顶部导航
       subMaxLevel: 3,                 // 侧边栏最多展开到 h3
@@ -45,7 +58,7 @@
       search: {
         maxAge: 86400000,
         paths: 'auto',
-        placeholder: '搜索更新 / 勘误…',
+        placeholder: '搜索牌组 / 更新 / 勘误…',
         noData: '找不到结果',
         depth: 4
       },
