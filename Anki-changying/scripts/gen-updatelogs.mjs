@@ -10,13 +10,7 @@ const data = JSON.parse(
   readFileSync(join(root, '.vitepress/theme/data/products.json'), 'utf-8'),
 )
 
-// 归档页分类标签（与 products.json 的 key 对齐，label 用更贴合归档的措辞）
-const CATS = [
-  { key: 'all', label: '全部' },
-  { key: 'yingyu', label: '考研英语' },
-  { key: 'riyu', label: '日语' },
-  { key: 'fakao', label: '法考' },
-]
+// 分类由 data/categories.json 提供（前端组件直接 import），本文件只负责汇总 logs。
 
 const logs = []
 for (const p of data.products) {
@@ -37,9 +31,8 @@ logs.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0))
 
 const feed = {
   _note:
-    '产品更新与勘误日志「唯一数据源」，由 scripts/gen-updatelogs.mjs 从各商品 timeline 自动汇总生成，请勿手改。category 取值必须是 CATS 里的 key；kind 取值 update | errata | mixed。content 用 \\n 换行。',
+    '产品更新与勘误日志「唯一数据源」，由 scripts/gen-updatelogs.mjs 从各商品 timeline 自动汇总生成，请勿手改。category 取值必须是 categories.json 里的 key；kind 取值 update | errata | mixed。content 用 \\n 换行。',
   _updated: new Date().toISOString().slice(0, 10),
-  categories: CATS,
   logs,
 }
 

@@ -19,6 +19,7 @@ const PORT = Number(process.env.PORT) || 4780
 const FILES = {
   site: join(DATA_DIR, 'site.json'),
   products: join(DATA_DIR, 'products.json'),
+  categories: join(DATA_DIR, 'categories.json'),
   notifications: join(DATA_DIR, 'notifications.json'),
 }
 
@@ -110,6 +111,9 @@ const server = createServer(async (req, res) => {
       if (req.method === 'GET' && path === '/api/site') {
         return send(res, 200, readJSON(FILES.site))
       }
+      if (req.method === 'GET' && path === '/api/categories') {
+        return send(res, 200, readJSON(FILES.categories))
+      }
       if (req.method === 'GET' && path === '/api/products') {
         return send(res, 200, readJSON(FILES.products))
       }
@@ -127,6 +131,47 @@ const server = createServer(async (req, res) => {
         writeJSON(FILES.products, body)
         const regen = regenerate()
         return send(res, 200, { ok: true, msg: '商品已保存', regen })
+      }
+      if (req.method === 'PUT' && path === '/api/categories') {
+        const body = await readBody(req)
+        if (!Array.isArray(body)) {
+          return send(res, 400, { ok: false, msg: '分类数据必须是数组' })
+        }
+        // 基本校验
+        const seen = new Set()
+        for (const c of body) {
+          if (!c.key || !c.label) {
+            return send(res, 400, { ok: false, msg: '每个分类都必须有 key 和名称' })
+          }
+          if (c.key === 'all') {
+            return send(res, 400, { ok: false, msg: '「all」是前端虚拟项（全部），不能作为真实分类' })
+          }
+          if (!/^[\w-]+$/.test(c.key)) {
+            return send(res, 400, { ok: false, msg: `分类 key「${c.key}」只能用英文/数字/下划线/连字符` })
+          }
+          if (seen.has(c.key)) {
+            return send(res, 400, { ok: false, msg: `分类 key「${c.key}」重复` })
+          }
+          seen.add(c.key)
+        }
+        // 删除保护：不允许有商品仍引用被删除的分类
+        const products = readJSON(FILES.products).products || []
+        const counts = {}
+        for (const p of products) counts[p.category] = (counts[p.category] || 0) + 1
+        const orphaned = Object.keys(counts).filter((k) => !seen.has(k) && counts[k] > 0)
+        if (orphaned.length) {
+          const detail = orphaned
+            .map((k) => `「${k}」仍有 ${counts[k]} 个商品`)
+            .join('、')
+          return send(res, 400, {
+            ok: false,
+            msg: `删除失败：${detail}。请先到「商品管理」把这些商品改到其他分类。`,
+          })
+        }
+        // 排序
+        body.sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0))
+        writeJSON(FILES.categories, body)
+        return send(res, 200, { ok: true, msg: '分类已保存' })
       }
       if (req.method === 'PUT' && path === '/api/notifications') {
         const body = await readBody(req)

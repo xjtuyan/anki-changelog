@@ -1,22 +1,4 @@
 {
-  "categories": [
-    {
-      "key": "all",
-      "label": "全部"
-    },
-    {
-      "key": "yingyu",
-      "label": "英语"
-    },
-    {
-      "key": "riyu",
-      "label": "日语"
-    },
-    {
-      "key": "fakao",
-      "label": "法考"
-    }
-  ],
   "products": [
     {
       "id": "hongbaoshu-27",

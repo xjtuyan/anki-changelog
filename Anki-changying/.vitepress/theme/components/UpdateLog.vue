@@ -1,14 +1,16 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import feed from '../data/updatelogs.json'
+import catsData from '../data/categories.json'
 
-const cats = feed.categories
+// 分类筛选栏：真实分类 + 「全部」虚拟项（单一来源 categories.json）
+const cats = [{ key: 'all', label: '全部' }, ...catsData]
 const allLogs = feed.logs
 const active = ref('all')
 const activeMonth = ref('')
 const showTop = ref(false)
 
-const catLabel = (key) => (cats.find((c) => c.key === key) || {}).label || key
+const catLabel = (key) => (catsData.find((c) => c.key === key) || {}).label || key
 
 const KIND_TEXT = { update: '更新', errata: '勘误', mixed: '更新 / 勘误' }
 const kindText = (k) => KIND_TEXT[k] || '更新'
@@ -383,6 +385,13 @@ onBeforeUnmount(() => {
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 1px;
+  /* 兜底配色：未在 CSS 中定义专属配色的分类使用 */
+  background-color: #ececf1;
+  color: #555;
+}
+.dark .ulg-badge {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--ulg-ink-2);
 }
 .ulg-badge.c-yingyu {
   background-color: #e5f3ff;

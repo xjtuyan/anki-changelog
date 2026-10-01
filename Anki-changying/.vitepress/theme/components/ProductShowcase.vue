@@ -1,13 +1,16 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { withBase } from 'vitepress'
-import data from '../data/products.json'
+import products from '../data/products.json'
+import catsData from '../data/categories.json'
 
+// 分类筛选栏：真实分类 + 「全部」虚拟项
+const cats = [{ key: 'all', label: '全部' }, ...catsData]
 const active = ref('all')
 const filtered = computed(() =>
   active.value === 'all'
-    ? data.products
-    : data.products.filter(p => p.category === active.value)
+    ? products.products
+    : products.products.filter(p => p.category === active.value)
 )
 const link = id => withBase('/products/' + id + '.html')
 const tagClass = t => (t === '热门' ? 'tag-hot' : t === '筹备中' ? 'tag-soon' : 'tag-new')
@@ -25,12 +28,12 @@ const tagClass = t => (t === '热门' ? 'tag-hot' : t === '筹备中' ? 'tag-soo
 
     <div class="ps-cats">
       <button
-        v-for="c in data.categories"
+        v-for="c in cats"
         :key="c.key"
         class="ps-cat"
         :class="{ on: active === c.key }"
         @click="active = c.key"
-      >{{ c.label }}</button>
+      >{{ c.icon ? c.icon + ' ' : '' }}{{ c.label }}</button>
     </div>
 
     <div class="deck-grid">

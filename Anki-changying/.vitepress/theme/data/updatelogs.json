@@ -1,24 +1,6 @@
 {
-  "_note": "产品更新与勘误日志「唯一数据源」，由 scripts/gen-updatelogs.mjs 从各商品 timeline 自动汇总生成，请勿手改。category 取值必须是 CATS 里的 key；kind 取值 update | errata | mixed。content 用 \\n 换行。",
+  "_note": "产品更新与勘误日志「唯一数据源」，由 scripts/gen-updatelogs.mjs 从各商品 timeline 自动汇总生成，请勿手改。category 取值必须是 categories.json 里的 key；kind 取值 update | errata | mixed。content 用 \\n 换行。",
   "_updated": "2026-10-01",
-  "categories": [
-    {
-      "key": "all",
-      "label": "全部"
-    },
-    {
-      "key": "yingyu",
-      "label": "考研英语"
-    },
-    {
-      "key": "riyu",
-      "label": "日语"
-    },
-    {
-      "key": "fakao",
-      "label": "法考"
-    }
-  ],
   "logs": [
     {
       "date": "2026-09-28",

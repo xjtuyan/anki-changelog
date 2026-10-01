@@ -1,0 +1,23 @@
+[
+  {
+    "key": "yingyu",
+    "label": "英语",
+    "icon": "🇬🇧",
+    "desc": "考研 / 四六级英语词库",
+    "order": 1
+  },
+  {
+    "key": "riyu",
+    "label": "日语",
+    "icon": "🇯🇵",
+    "desc": "日语能力考词库",
+    "order": 2
+  },
+  {
+    "key": "fakao",
+    "label": "法考",
+    "icon": "⚖️",
+    "desc": "法律职业资格考试词库",
+    "order": 3
+  }
+]

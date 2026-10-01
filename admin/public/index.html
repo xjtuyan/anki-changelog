@@ -120,6 +120,7 @@
 <nav class="tabs">
   <button data-tab="site" class="on">网站基本信息</button>
   <button data-tab="products">商品管理</button>
+  <button data-tab="cats">商品分类</button>
   <button data-tab="notif">通知管理</button>
   <button data-tab="logs">更新与勘误</button>
 </nav>
@@ -156,6 +157,12 @@
     <div id="productEditor" style="display:none"></div>
   </section>
 
+  <!-- 商品分类 -->
+  <section class="panel" id="tab-cats">
+    <div id="catsList"></div>
+    <div id="catEditor" style="display:none"></div>
+  </section>
+
   <!-- 通知管理 -->
   <section class="panel" id="tab-notif">
     <div class="card">
@@ -189,7 +196,7 @@ function apiGet(p){ return fetch(API+'/api/'+p).then(r=>r.json()) }
 function apiPut(p, body){ return fetch(API+'/api/'+p, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)}).then(r=>r.json()) }
 function apiPost(p){ return fetch(API+'/api/'+p, {method:'POST'}).then(r=>r.json()) }
 
-let SITE = {}, PRODUCTS = { categories: [], products: [] }, NOTIF = { items: [] }
+let SITE = {}, PRODUCTS = { products: [] }, CATS = [], NOTIF = { items: [] }
 
 function toast(msg, err){
   const t = $('toast'); t.textContent = msg; t.className = 'toast show' + (err ? ' err' : '')
@@ -205,6 +212,7 @@ document.querySelectorAll('nav.tabs button').forEach(b=>{
     b.classList.add('on'); $('tab-'+b.dataset.tab).classList.add('on')
     if (b.dataset.tab==='logs') renderLogs()
     if (b.dataset.tab==='products') renderProducts()
+    if (b.dataset.tab==='cats') renderCats()
   }
 })
 
@@ -247,8 +255,79 @@ $('saveSite').onclick = async ()=>{
   if (r.ok){ SITE = data; toast('站点信息已保存') } else toast('保存失败：'+r.msg, true)
 }
 
+// ---------- 商品分类 ----------
+function catLabel(key){ return (CATS.find(c=>c.key===key)||{}).label || key }
+function renderCats(){
+  const box = $('catsList')
+  if (!CATS.length){ box.innerHTML = '<div class="card"><div class="empty">暂无分类，点击下方「新增分类」</div><div style="margin-top:14px"><button class="btn-red btn-sm" id="addCat">+ 新增分类</button></div></div>' }
+  else {
+    const rows = CATS.map(c=>{
+      const n = PRODUCTS.products.filter(p=>p.category===c.key).length
+      return `<tr>
+        <td>${esc(c.order??'')}</td>
+        <td>${esc(c.icon||'')} ${esc(c.label)}</td>
+        <td><code>${esc(c.key)}</code></td>
+        <td>${esc(c.desc||'—')}</td>
+        <td>${n} 个</td>
+        <td class="row-actions">
+          <button class="btn-line btn-sm" data-cedit="${esc(c.key)}">编辑</button>
+          <button class="btn-red btn-sm" data-cdel="${esc(c.key)}" ${n>0?'disabled title="该分类下还有商品，需先把它们改到其他分类"':''}>删除</button>
+        </td></tr>`
+    }).join('')
+    box.innerHTML = `<div class="card"><table>
+      <thead><tr><th>顺序</th><th>分类</th><th>key</th><th>说明</th><th>商品数</th><th>操作</th></tr></thead>
+      <tbody>${rows}</tbody></table>
+      <p class="hint" style="margin-top:12px">网站前台的产品展示页、更新日志页的分类筛选栏都来自这里。key 建立后不可改名；删除分类前需先把该分类下的商品改到其他分类。</p>
+      <div style="margin-top:10px"><button class="btn-red btn-sm" id="addCat">+ 新增分类</button></div></div>`
+  }
+  box.querySelector('#addCat').onclick = ()=> openCatEditor(null)
+  box.querySelectorAll('[data-cedit]').forEach(b=> b.onclick = ()=> openCatEditor(b.dataset.cedit))
+  box.querySelectorAll('[data-cdel]').forEach(b=> b.onclick = async ()=>{
+    const c = CATS.find(x=>x.key===b.dataset.cdel)
+    if (!confirm('确认删除分类「'+(c||{}).label+'」？')) return
+    const newCats = CATS.filter(x=>x.key!==b.dataset.cdel)
+    const r = await apiPut('categories', newCats)
+    if (r.ok){ CATS = newCats; renderCats(); renderProducts(); renderLogs(); toast('分类已删除') }
+    else toast('删除失败：'+r.msg, true)
+  })
+}
+function openCatEditor(key){
+  $('catsList').style.display='none'
+  const ed = $('catEditor'); ed.style.display='block'
+  const c = key ? JSON.parse(JSON.stringify(CATS.find(x=>x.key===key))) :
+    { key:'', label:'', icon:'', desc:'', order: CATS.length + 1 }
+  ed.innerHTML = `<div class="editor"><div class="ed-head"><h2>${key?'编辑分类':'新增分类'}</h2><div class="spacer"></div>
+      <button class="btn-line btn-sm" id="cCancel">返回列表</button>
+      <button class="btn-red btn-sm" id="cSave" style="margin-left:8px">保存分类</button></div>
+    <div class="grid2">
+      <div><label>key（唯一，英文/数字/连字符）${key?'<br><span style="color:var(--amber);font-weight:400">key 建立后不可改名，如需更换请新建分类</span>':''}</label><input type="text" id="c.key" value="${esc(c.key)}" ${key?'readonly':''}></div>
+      <div><label>名称（如 英语）</label><input type="text" id="c.label" value="${esc(c.label)}"></div>
+      <div><label>图标 emoji（可选，展示在筛选栏）</label><input type="text" id="c.icon" value="${esc(c.icon||'')}" placeholder="如 🇬🇧"></div>
+      <div><label>排序数字（小的在前）</label><input type="text" id="c.order" value="${esc(c.order??'')}"></div>
+    </div>
+    <div style="margin-top:14px"><label>说明（可选）</label><input type="text" id="c.desc" value="${esc(c.desc||'')}" placeholder="如 考研 / 四六级英语词库"></div>
+  </div>`
+  $('cCancel').onclick = closeCat
+  $('cSave').onclick = async ()=>{
+    const nc = {
+      key: $('c.key').value.trim(), label: $('c.label').value.trim(),
+      icon: $('c.icon').value.trim(), desc: $('c.desc').value.trim(),
+      order: Number($('c.order').value) || 0
+    }
+    if (!nc.key || !nc.label){ toast('key 与名称必填', true); return }
+    if (!key && CATS.some(x=>x.key===nc.key)){ toast('key 已存在', true); return }
+    let newCats
+    if (key) newCats = CATS.map(x=> x.key===key? nc : x)
+    else newCats = [...CATS, nc]
+    newCats.sort((a,b)=> (Number(a.order)||0) - (Number(b.order)||0))
+    const r = await apiPut('categories', newCats)
+    if (r.ok){ CATS = newCats; closeCat(); renderCats(); renderProducts(); renderLogs(); toast('分类已保存') }
+    else toast('保存失败：'+r.msg, true)
+  }
+}
+function closeCat(){ $('catEditor').style.display='none'; $('catsList').style.display='block'; $('catEditor').innerHTML='' }
+
 // ---------- 商品管理 ----------
-function catLabel(key){ return (PRODUCTS.categories.find(c=>c.key===key)||{}).label || key }
 function renderProducts(){
   const box = $('productsList')
   if (!PRODUCTS.products.length){ box.innerHTML = '<div class="empty">暂无商品，点击右下「新增商品」</div>'; return }
@@ -281,11 +360,11 @@ function openProductEditor(id){
   $('productsList').style.display='none'
   const ed = $('productEditor'); ed.style.display='block'
   const p = id ? JSON.parse(JSON.stringify(PRODUCTS.products.find(x=>x.id===id))) : {
-    id:'', name:'', category: (PRODUCTS.categories.find(c=>c.key!=='all')||{}).key||'yingyu',
+    id:'', name:'', category: (CATS[0]||{}).key||'',
     icon:'📘', tags:[], meta:'', desc:'', price:'', buy:'', deckName:'', match:[],
     version:'', updated:'', intro:[], timeline:[]
   }
-  const catOpts = PRODUCTS.categories.filter(c=>c.key!=='all').map(c=>`<option value="${c.key}" ${c.key===p.category?'selected':''}>${esc(c.label)}</option>`).join('')
+  const catOpts = CATS.map(c=>`<option value="${c.key}" ${c.key===p.category?'selected':''}>${esc(c.icon? c.icon+' ':'' )}${esc(c.label)}</option>`).join('')
   ed.innerHTML = `<div class="editor"><div class="ed-head"><h2>${id?'编辑商品':'新增商品'}</h2><div class="spacer"></div>
       <button class="btn-line btn-sm" id="edCancel">返回列表</button>
       <button class="btn-red btn-sm" id="edSave" style="margin-left:8px">保存商品</button></div>
@@ -449,8 +528,8 @@ function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;'
 // ---------- 初始化 ----------
 async function init(){
   try {
-    SITE = await apiGet('site'); PRODUCTS = await apiGet('products'); NOTIF = await apiGet('notifications')
-    bindSite(); renderProducts(); renderNotif(); renderLogs()
+    SITE = await apiGet('site'); PRODUCTS = await apiGet('products'); CATS = await apiGet('categories'); NOTIF = await apiGet('notifications')
+    bindSite(); renderProducts(); renderCats(); renderNotif(); renderLogs()
   } catch(e){ toast('加载失败：'+e.message, true) }
 }
 init()
