@@ -7,16 +7,11 @@
   --vp-home-hero-name-color: #c0392b;
 }
 
-/* ===== 自定义 layout: page 的全宽容器（更新与勘误日志等） ===== */
+/* ===== 自定义 layout: page 的全宽容器（首页落地页 / 更新与勘误日志） ===== */
 .VPPage {
   width: 100%;
-}
-
-/* 首页 Hero 下方光晕 */
-:root {
-  --vp-home-hero-image-background-image:
-    linear-gradient(120deg, rgba(192,57,43,0.18) 30%, rgba(22,119,255,0.12) 70%);
-  --vp-home-hero-image-filter: blur(44px);
+  max-width: 100%;
+  padding: 0;
 }
 
 /* ===== 产品卡片网格 ===== */
@@ -66,42 +61,6 @@
 }
 .tag-hot { background: #ffe9e6; color: #c0392b; }
 .tag-new { background: #e6f4ff; color: #1677ff; }
-
-/* ===== 首页入口小卡 ===== */
-.mini-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 18px;
-  margin: 20px 0;
-}
-.mini-card {
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 14px;
-  padding: 20px;
-  background: var(--vp-c-bg-soft);
-  transition: transform .2s ease, box-shadow .2s ease;
-}
-.mini-card:hover { transform: translateY(-4px); box-shadow: 0 12px 26px rgba(0,0,0,.08); }
-.mini-card .ico { font-size: 30px; }
-.mini-card h3 { margin: 8px 0 6px; }
-.mini-card p { font-size: 14px; color: var(--vp-c-text-2); line-height: 1.6; margin: 0 0 12px; }
-.mini-card a { color: var(--vp-c-brand-1); font-weight: 600; text-decoration: none; }
-
-/* ===== 价值点行 ===== */
-.feature-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
-  margin: 18px 0;
-}
-.f {
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 12px;
-  padding: 16px;
-  background: var(--vp-c-bg-soft);
-  font-size: 14px;
-  line-height: 1.6;
-}
 
 /* ===== 产品展示：分类筛选 ===== */
 .ps-cats { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 4px; }
@@ -194,67 +153,4 @@
 .tl-badge.errata { background: rgba(180, 83, 9, .12); color: #b45309; }
 .tl-body ul { margin: 8px 0 0; padding-left: 18px; }
 .tl-body li { margin: 4px 0; font-size: 14.5px; line-height: 1.7; }
-
-/* ===== 首页大气价值区块（垂直堆叠） ===== */
-.home-values {
-  margin: 64px auto 48px;
-  max-width: 760px;
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-}
-.value-card {
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 20px;
-  padding: 32px 36px;
-  background: var(--vp-c-bg-soft);
-  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-}
-.value-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, .08);
-  border-color: var(--vp-c-brand-1);
-}
-.value-card .value-meta {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 14px;
-}
-.value-card .value-icon {
-  font-size: 40px;
-  line-height: 1;
-}
-.value-card h3 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--vp-c-text-1);
-}
-.value-card p {
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.75;
-  color: var(--vp-c-text-2);
-}
-
-@media (max-width: 640px) {
-  .home-values {
-    margin: 40px auto 32px;
-    gap: 18px;
-  }
-  .value-card {
-    padding: 24px;
-    border-radius: 16px;
-  }
-  .value-card .value-icon {
-    font-size: 32px;
-  }
-  .value-card h3 {
-    font-size: 19px;
-  }
-  .value-card p {
-    font-size: 15px;
-  }
-}
 

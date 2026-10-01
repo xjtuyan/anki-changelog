@@ -1,7 +1,7 @@
 window.DECKS_FEED = {
   "feedVersion": 1,
   "site": "长缨记忆卡",
-  "generatedAt": "2026-09-30",
+  "generatedAt": "2026-10-01",
   "decks": [
     {
       "id": "hongbaoshu-27",
