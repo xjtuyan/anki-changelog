@@ -41,7 +41,7 @@ const year = new Date().getFullYear()
       <div class="hl-hero-inner">
         <p class="hl-kicker">Anki 牌组 · 长缨记忆卡</p>
         <h1 class="hl-hero-title">
-          今日长缨在手，<br><span class="hl-accent">何时缚住苍龙</span>
+          今日长缨在手<br><span class="hl-accent">何时缚住苍龙</span>
         </h1>
         <p class="hl-hero-cite">—— 毛泽东《清平乐 · 六盘山》</p>
         <p class="hl-hero-sub">
@@ -306,9 +306,9 @@ const year = new Date().getFullYear()
 .hl-hero-title {
   margin: 0 0 14px;
   font-size: clamp(2.2rem, 6vw, 4.4rem);
-  line-height: 1.14;
+  line-height: 1.32;
   font-weight: 900;
-  letter-spacing: -.01em;
+  letter-spacing: .04em;
   color: var(--hl-ink);
 }
 .hl-accent { color: var(--hl-accent); }
