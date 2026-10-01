@@ -41,8 +41,9 @@ const year = new Date().getFullYear()
       <div class="hl-hero-inner">
         <p class="hl-kicker">Anki 牌组 · 长缨记忆卡</p>
         <h1 class="hl-hero-title">
-          长缨在手，<br><span class="hl-accent">缚住知识苍龙</span>
+          今日长缨在手，<br><span class="hl-accent">何时缚住苍龙</span>
         </h1>
+        <p class="hl-hero-cite">—— 毛泽东《清平乐 · 六盘山》</p>
         <p class="hl-hero-sub">
           为考研 · 法考 · 日语备考者打造专业 Anki 牌组<br>
           科学记忆，持续迭代，勘误透明
@@ -303,7 +304,7 @@ const year = new Date().getFullYear()
 }
 
 .hl-hero-title {
-  margin: 0 0 26px;
+  margin: 0 0 14px;
   font-size: clamp(2.2rem, 6vw, 4.4rem);
   line-height: 1.14;
   font-weight: 900;
@@ -311,6 +312,15 @@ const year = new Date().getFullYear()
   color: var(--hl-ink);
 }
 .hl-accent { color: var(--hl-accent); }
+
+.hl-hero-cite {
+  margin: 0 0 28px;
+  font-size: clamp(.92rem, 1.7vw, 1.1rem);
+  letter-spacing: .1em;
+  font-weight: 500;
+  color: var(--hl-gray);
+  opacity: .85;
+}
 
 .hl-hero-sub {
   margin: 0 auto 44px;
