@@ -154,3 +154,31 @@
 .tl-body ul { margin: 8px 0 0; padding-left: 18px; }
 .tl-body li { margin: 4px 0; font-size: 14.5px; line-height: 1.7; }
 
+/* ===== 顶部导航：整体字号调大 =====
+   注意：VitePress 内置组件是 <style scoped>，编译后变成 `.类名[data-v-xxx]`（特异度 0,2,0）。
+   所以覆盖时必须把特异度抬到 0,3,0 以上（多加一层 .VPNav / .VPNavBar），否则不生效。 */
+.VPNav .VPNavBar .VPNavBarTitle .title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.VPNav .VPNavBar .VPNavBarMenu .VPNavBarMenuLink {
+  padding: 0 14px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.VPNav .VPNavBar .VPNavBarMenu .VPFlyout .button {
+  font-size: 16px;
+}
+
+.VPNav .VPNavBar .DocSearch-Button .DocSearch-Button-Placeholder {
+  font-size: 15px;
+}
+
+/* 移动端抽屉菜单同步 */
+.VPNav .VPNavScreen .VPNavScreenMenuLink,
+.VPNav .VPNavScreen .VPNavScreenMenuGroupLink {
+  font-size: 16px;
+}
+
