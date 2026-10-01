@@ -19,5 +19,12 @@
     "icon": "⚖️",
     "desc": "法律职业资格考试词库",
     "order": 3
+  },
+  {
+    "key": "others-11",
+    "label": "其他",
+    "icon": "",
+    "desc": "",
+    "order": 4
   }
 ]
