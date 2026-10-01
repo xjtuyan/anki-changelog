@@ -1,11 +1,11 @@
 import { defineConfig } from 'vitepress'
 
 // base 说明：
-// - GitHub Pages 项目站托管在 https://xjtuyan.github.io/anki-changelog/ 子路径下，
-//   构建时需设 DEPLOY_TARGET=gh → base = '/anki-changelog/'（deploy.yml 已设置）。
-// - Cloudflare Pages / 自定义域名把 dist 作为站点根 → 不设 DEPLOY_TARGET，base = '/'。
-const isGhPages = process.env.DEPLOY_TARGET === 'gh'
-const BASE = isGhPages ? '/anki-changelog/' : '/'
+// 站点以 GitHub Pages + 自定义域名 www.cycards.cn 为主力。
+// 自定义域名下 GitHub Pages 把 dist 作为「站点根」提供服务，
+// 因此 base 固定为 '/'，所有资源都从根路径加载。
+// （早期无自定义域名时曾用 /anki-changelog/ 项目子路径 base，现不再使用。）
+const BASE = '/'
 
 export default defineConfig({
   base: BASE,
