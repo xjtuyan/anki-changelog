@@ -4,11 +4,15 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "predocs:dev": "node scripts/gen-decks.mjs",
+    "predocs:dev": "node scripts/gen-decks.mjs && node scripts/gen-pages.mjs && node scripts/gen-updatelogs.mjs",
     "docs:dev": "vitepress dev",
-    "predocs:build": "node scripts/gen-decks.mjs",
+    "predocs:build": "node scripts/gen-decks.mjs && node scripts/gen-pages.mjs && node scripts/gen-updatelogs.mjs",
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview",
+    "gen:decks": "node scripts/gen-decks.mjs",
+    "gen:pages": "node scripts/gen-pages.mjs",
+    "gen:logs": "node scripts/gen-updatelogs.mjs",
+    "sync:timelines": "node scripts/sync-timelines.mjs",
     "brand": "C:/Users/YAN/.workbuddy/binaries/python/envs/default/Scripts/python.exe scripts/make_brand.py"
   },
   "devDependencies": {

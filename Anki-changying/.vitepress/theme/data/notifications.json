@@ -1,0 +1,17 @@
+{
+  "_note": "全站通知横幅「唯一数据源」。active=true 才展示；start/end 为空表示长期有效。level 取值 info|success|warning|danger，决定横幅配色。用户关闭后记录到浏览器 localStorage，不再弹出（清缓存可重新看到）。",
+  "_updated": "2026-10-01",
+  "items": [
+    {
+      "id": "welcome-2026",
+      "level": "info",
+      "title": "长缨记忆卡管理后台已上线",
+      "text": "商品、通知、更新与勘误记录现在都能在本地管理后台统一维护，改完一键发布到 GitHub Pages。",
+      "link": "https://www.cycards.cn/about",
+      "linkText": "了解用法",
+      "active": true,
+      "start": "2026-10-01",
+      "end": ""
+    }
+  ]
+}

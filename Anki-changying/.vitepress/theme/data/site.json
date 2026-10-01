@@ -1,0 +1,34 @@
+{
+  "siteName": "长缨记忆卡",
+  "title": "长缨记忆卡",
+  "description": "为考研 · 法考 · 日语备考者打造专业 Anki 牌组。科学记忆，持续迭代，勘误透明。",
+  "domain": "www.cycards.cn",
+  "lang": "zh-CN",
+  "footer": {
+    "message": "长缨记忆卡 · 专业 Anki 牌组",
+    "copyright": "Copyright © 2026 长缨记忆卡"
+  },
+  "nav": [
+    {
+      "text": "首页",
+      "link": "/"
+    },
+    {
+      "text": "产品展示",
+      "link": "/products"
+    },
+    {
+      "text": "更新与勘误",
+      "link": "/updatelogs"
+    },
+    {
+      "text": "关于",
+      "link": "/about"
+    }
+  ],
+  "social": {
+    "taobao": "https://shop.taobao.com/长缨记忆卡",
+    "email": ""
+  },
+  "updatedAt": "2026-10-01"
+}

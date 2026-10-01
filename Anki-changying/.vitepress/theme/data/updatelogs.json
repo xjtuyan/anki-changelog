@@ -1,11 +1,23 @@
 {
-  "_note": "产品更新与勘误日志「唯一数据源」。新增一条日志 = 在 logs 数组里加一个对象（date 倒序排也行，组件会自动按月分组并倒序）。category 取值必须是 categories 里的 key；kind 取值 update | errata | mixed。content 用 \\n 换行，编号沿用全角「（1）①a.」四级体系。",
+  "_note": "产品更新与勘误日志「唯一数据源」，由 scripts/gen-updatelogs.mjs 从各商品 timeline 自动汇总生成，请勿手改。category 取值必须是 CATS 里的 key；kind 取值 update | errata | mixed。content 用 \\n 换行。",
   "_updated": "2026-10-01",
   "categories": [
-    { "key": "all", "label": "全部" },
-    { "key": "yingyu", "label": "考研英语" },
-    { "key": "riyu", "label": "日语" },
-    { "key": "fakao", "label": "法考" }
+    {
+      "key": "all",
+      "label": "全部"
+    },
+    {
+      "key": "yingyu",
+      "label": "考研英语"
+    },
+    {
+      "key": "riyu",
+      "label": "日语"
+    },
+    {
+      "key": "fakao",
+      "label": "法考"
+    }
   ],
   "logs": [
     {

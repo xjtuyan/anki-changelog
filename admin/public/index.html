@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>长缨记忆卡 · 网站管理后台</title>
+<style>
+  :root {
+    --red: #c0392b;
+    --red-d: #a93226;
+    --ink: #1d1d1f;
+    --ink2: #6e6e73;
+    --line: #e5e5ea;
+    --soft: #f5f5f7;
+    --card: #fff;
+    --blue: #2563eb;
+    --green: #16a34a;
+    --amber: #d97706;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    color: var(--ink);
+    background: var(--soft);
+  }
+  header.top {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, var(--red) 0%, #98261b 100%);
+    color: #fff;
+  }
+  header.top h1 { margin: 0; font-size: 18px; font-weight: 800; letter-spacing: 1px; }
+  header.top .spacer { flex: 1; }
+  header.top .status { font-size: 13px; opacity: .9; max-width: 46%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  button {
+    font-family: inherit; cursor: pointer; border: none; border-radius: 8px;
+    padding: 9px 16px; font-size: 14px; font-weight: 600; transition: all .2s;
+  }
+  .btn-primary { background: #fff; color: var(--red); }
+  .btn-primary:hover { background: #ffe9e6; }
+  .btn-ghost { background: rgba(255,255,255,.18); color: #fff; }
+  .btn-ghost:hover { background: rgba(255,255,255,.3); }
+  .btn-red { background: var(--red); color: #fff; }
+  .btn-red:hover { background: var(--red-d); }
+  .btn-line { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+  .btn-line:hover { border-color: var(--red); color: var(--red); }
+  .btn-sm { padding: 5px 11px; font-size: 13px; }
+
+  nav.tabs { display: flex; gap: 4px; padding: 0 24px; background: #fff; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  nav.tabs button {
+    background: transparent; color: var(--ink2); border-radius: 0; padding: 14px 18px;
+    border-bottom: 3px solid transparent; font-size: 15px;
+  }
+  nav.tabs button.on { color: var(--red); border-bottom-color: var(--red); }
+
+  main { max-width: 1120px; margin: 0 auto; padding: 28px 24px 80px; }
+  .panel { display: none; }
+  .panel.on { display: block; }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px; margin-bottom: 20px; }
+  .card h2 { margin: 0 0 16px; font-size: 17px; }
+  .card h3 { margin: 18px 0 10px; font-size: 15px; color: var(--ink2); }
+  .hint { font-size: 13px; color: var(--ink2); line-height: 1.7; margin: 0 0 14px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+  label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
+  input[type=text], input[type=url], input[type=date], textarea, select {
+    width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px;
+    font-family: inherit; font-size: 14px; color: var(--ink); background: #fff;
+  }
+  textarea { resize: vertical; min-height: 76px; line-height: 1.6; }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--red); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--line); }
+  th { font-size: 12px; color: var(--ink2); font-weight: 700; background: var(--soft); }
+  td .tag { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 12px; background: #eee; margin-right: 4px; }
+  .row-actions { display: flex; gap: 6px; }
+
+  .nav-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .nav-row input { flex: 1; }
+  .nav-row .nk { flex: 0 0 120px; }
+
+  .tl-item { border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 12px; background: #fcfcfd; }
+  .tl-item .tl-head { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .tl-item .tl-head input { flex: 1; }
+  .tl-item .tl-head select { flex: 0 0 120px; }
+
+  .editor { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 22px; }
+  .editor .ed-head { display: flex; align-items: center; margin-bottom: 16px; }
+  .editor .ed-head h2 { margin: 0; }
+  .editor .ed-head .spacer { flex: 1; }
+  .empty { color: var(--ink2); font-size: 14px; padding: 20px 0; text-align: center; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+    background: #1d1d1f; color: #fff; padding: 12px 22px; border-radius: 10px;
+    font-size: 14px; opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 200; max-width: 80%;
+  }
+  .toast.show { opacity: 1; }
+  .toast.err { background: var(--red); }
+  .level-info { color: var(--blue); }
+  .level-success { color: var(--green); }
+  .level-warning { color: var(--amber); }
+  .level-danger { color: var(--red); }
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>⚔️ 长缨记忆卡 · 网站管理后台</h1>
+  <div class="spacer"></div>
+  <span class="status" id="status"></span>
+  <button class="btn-ghost" id="btnRegen">重新生成</button>
+  <button class="btn-primary" id="btnPublish">发布到 GitHub Pages</button>
+</header>
+
+<nav class="tabs">
+  <button data-tab="site" class="on">网站基本信息</button>
+  <button data-tab="products">商品管理</button>
+  <button data-tab="notif">通知管理</button>
+  <button data-tab="logs">更新与勘误</button>
+</nav>
+
+<main>
+  <!-- 网站基本信息 -->
+  <section class="panel on" id="tab-site">
+    <div class="card">
+      <h2>网站基本信息</h2>
+      <p class="hint">此处为全站公共信息，保存后下次构建立即生效（标题、描述、导航、页脚、联系方式）。</p>
+      <div class="grid2">
+        <div><label>站点名称</label><input type="text" id="site.siteName"></div>
+        <div><label>浏览器标题 title</label><input type="text" id="site.title"></div>
+        <div><label>域名 domain</label><input type="text" id="site.domain"></div>
+        <div><label>语言 lang</label><input type="text" id="site.lang"></div>
+      </div>
+      <div style="margin-top:16px"><label>站点描述 description</label><textarea id="site.description"></textarea></div>
+      <div class="grid2" style="margin-top:16px">
+        <div><label>页脚标语</label><input type="text" id="site.footer.message"></div>
+        <div><label>页脚版权</label><input type="text" id="site.footer.copyright"></div>
+        <div><label>淘宝店铺链接</label><input type="url" id="site.social.taobao"></div>
+        <div><label>联系邮箱</label><input type="text" id="site.social.email"></div>
+      </div>
+      <h3>顶部导航 nav</h3>
+      <div id="siteNav"></div>
+      <button class="btn-line btn-sm" id="addNav">+ 新增导航项</button>
+      <div style="margin-top:18px"><button class="btn-red" id="saveSite">保存网站信息</button></div>
+    </div>
+  </section>
+
+  <!-- 商品管理 -->
+  <section class="panel" id="tab-products">
+    <div id="productsList"></div>
+    <div id="productEditor" style="display:none"></div>
+  </section>
+
+  <!-- 通知管理 -->
+  <section class="panel" id="tab-notif">
+    <div class="card">
+      <h2>通知管理</h2>
+      <p class="hint">通知会以可关闭的横幅展示在全站顶部。active 取消即隐藏；start/end 留空表示长期有效。</p>
+      <div style="margin-bottom:14px"><button class="btn-red btn-sm" id="addNotif">+ 新增通知</button></div>
+      <div id="notifList"></div>
+    </div>
+    <div id="notifEditor" style="display:none"></div>
+  </section>
+
+  <!-- 更新与勘误 -->
+  <section class="panel" id="tab-logs">
+    <div class="card">
+      <h2>各商品更新与勘误记录</h2>
+      <p class="hint">
+        每个商品的「更新 / 勘误」时间轴保存在商品数据里，详情页与全站《更新与勘误日志》页都从这里汇总生成，永远一致。
+        要新增/修改某条记录，请到「商品管理」里编辑对应商品的「更新与勘误时间轴」；改完点右上角「重新生成」同步日志页。
+      </p>
+      <div id="logsView"></div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = ''
+function $(id) { return document.getElementById(id) }
+function apiGet(p){ return fetch(API+'/api/'+p).then(r=>r.json()) }
+function apiPut(p, body){ return fetch(API+'/api/'+p, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)}).then(r=>r.json()) }
+function apiPost(p){ return fetch(API+'/api/'+p, {method:'POST'}).then(r=>r.json()) }
+
+let SITE = {}, PRODUCTS = { categories: [], products: [] }, NOTIF = { items: [] }
+
+function toast(msg, err){
+  const t = $('toast'); t.textContent = msg; t.className = 'toast show' + (err ? ' err' : '')
+  clearTimeout(t._t); t._t = setTimeout(()=> t.className='toast', 2600)
+}
+function setStatus(msg){ $('status').textContent = msg || '' }
+
+// ---------- Tabs ----------
+document.querySelectorAll('nav.tabs button').forEach(b=>{
+  b.onclick = ()=>{
+    document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.remove('on'))
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'))
+    b.classList.add('on'); $('tab-'+b.dataset.tab).classList.add('on')
+    if (b.dataset.tab==='logs') renderLogs()
+    if (b.dataset.tab==='products') renderProducts()
+  }
+})
+
+// ---------- 网站信息 ----------
+function bindSite(){
+  $('site\\.siteName').value = SITE.siteName || ''
+  $('site\\.title').value = SITE.title || ''
+  $('site\\.domain').value = SITE.domain || ''
+  $('site\\.lang').value = SITE.lang || 'zh-CN'
+  $('site\\.description').value = SITE.description || ''
+  $('site\\.footer.message').value = (SITE.footer||{}).message || ''
+  $('site\\.footer.copyright').value = (SITE.footer||{}).copyright || ''
+  $('site\\.social.taobao').value = ((SITE.social)||{}).taobao || ''
+  $('site\\.social.email').value = ((SITE.social)||{}).email || ''
+  const wrap = $('siteNav'); wrap.innerHTML = ''
+  ;(SITE.nav||[]).forEach((n,i)=> wrap.appendChild(navRow(n,i)))
+}
+function navRow(n, i){
+  const d = document.createElement('div'); d.className='nav-row'
+  d.innerHTML = `<input class="nk" type="text" placeholder="显示文字" value="${esc(n.text||'')}">
+    <input type="text" placeholder="链接 /products" value="${esc(n.link||'')}">
+    <button class="btn-line btn-sm">删除</button>`
+  d.querySelector('button').onclick = ()=> d.remove()
+  return d
+}
+$('addNav').onclick = ()=> $('siteNav').appendChild(navRow({text:'',link:''}))
+$('saveSite').onclick = async ()=>{
+  const nav = [...$('siteNav').children].map(r=>{
+    const ins = r.querySelectorAll('input'); return { text: ins[0].value, link: ins[1].value }
+  }).filter(n=> n.text && n.link)
+  const data = {
+    siteName: $('site\\.siteName').value, title: $('site\\.title').value,
+    domain: $('site\\.domain').value, lang: $('site\\.lang').value || 'zh-CN',
+    description: $('site\\.description').value,
+    footer: { message: $('site\\.footer.message').value, copyright: $('site\\.footer.copyright').value },
+    social: { taobao: $('site\\.social.taobao').value, email: $('site\\.social.email').value },
+    nav, updatedAt: new Date().toISOString().slice(0,10),
+  }
+  const r = await apiPut('site', data)
+  if (r.ok){ SITE = data; toast('站点信息已保存') } else toast('保存失败：'+r.msg, true)
+}
+
+// ---------- 商品管理 ----------
+function catLabel(key){ return (PRODUCTS.categories.find(c=>c.key===key)||{}).label || key }
+function renderProducts(){
+  const box = $('productsList')
+  if (!PRODUCTS.products.length){ box.innerHTML = '<div class="empty">暂无商品，点击右下「新增商品」</div>'; return }
+  let rows = PRODUCTS.products.map(p=>`
+    <tr>
+      <td>${esc(p.icon||'')} ${esc(p.name)}</td>
+      <td>${esc(catLabel(p.category))}</td>
+      <td>${esc(p.version||'—')}</td>
+      <td>${esc(p.updated||'—')}</td>
+      <td>${(p.timeline||[]).length} 条</td>
+      <td class="row-actions">
+        <button class="btn-line btn-sm" data-edit="${p.id}">编辑</button>
+        <button class="btn-red btn-sm" data-del="${p.id}">删除</button>
+      </td>
+    </tr>`).join('')
+  box.innerHTML = `<div class="card"><table>
+    <thead><tr><th>商品</th><th>分类</th><th>版本</th><th>更新日期</th><th>记录数</th><th>操作</th></tr></thead>
+    <tbody>${rows}</tbody></table>
+    <div style="margin-top:14px"><button class="btn-red btn-sm" id="addProduct">+ 新增商品</button></div></div>`
+  box.querySelector('#addProduct').onclick = ()=> openProductEditor(null)
+  box.querySelectorAll('[data-edit]').forEach(b=> b.onclick = ()=> openProductEditor(b.dataset.edit))
+  box.querySelectorAll('[data-del]').forEach(b=> b.onclick = async ()=>{
+    if (!confirm('确认删除商品「'+(PRODUCTS.products.find(x=>x.id===b.dataset.del)||{}).name+'」？此操作不可撤销。')) return
+    PRODUCTS.products = PRODUCTS.products.filter(x=> x.id !== b.dataset.del)
+    await saveProducts(); renderProducts(); toast('已删除')
+  })
+}
+
+function openProductEditor(id){
+  $('productsList').style.display='none'
+  const ed = $('productEditor'); ed.style.display='block'
+  const p = id ? JSON.parse(JSON.stringify(PRODUCTS.products.find(x=>x.id===id))) : {
+    id:'', name:'', category: (PRODUCTS.categories.find(c=>c.key!=='all')||{}).key||'yingyu',
+    icon:'📘', tags:[], meta:'', desc:'', price:'', buy:'', deckName:'', match:[],
+    version:'', updated:'', intro:[], timeline:[]
+  }
+  const catOpts = PRODUCTS.categories.filter(c=>c.key!=='all').map(c=>`<option value="${c.key}" ${c.key===p.category?'selected':''}>${esc(c.label)}</option>`).join('')
+  ed.innerHTML = `<div class="editor"><div class="ed-head"><h2>${id?'编辑商品':'新增商品'}</h2><div class="spacer"></div>
+      <button class="btn-line btn-sm" id="edCancel">返回列表</button>
+      <button class="btn-red btn-sm" id="edSave" style="margin-left:8px">保存商品</button></div>
+    <div class="grid2">
+      <div><label>商品 ID（唯一，英文/数字/连字符）</label><input type="text" id="p.id" value="${esc(p.id)}" ${id?'readonly':''}></div>
+      <div><label>名称</label><input type="text" id="p.name" value="${esc(p.name)}"></div>
+      <div><label>分类</label><select id="p.category">${catOpts}</select></div>
+      <div><label>图标 emoji</label><input type="text" id="p.icon" value="${esc(p.icon)}"></div>
+      <div><label>标签（逗号分隔，如 热门,新版）</label><input type="text" id="p.tags" value="${esc((p.tags||[]).join(','))}"></div>
+      <div><label>副标题 meta</label><input type="text" id="p.meta" value="${esc(p.meta)}"></div>
+      <div><label>价格</label><input type="text" id="p.price" value="${esc(p.price)}"></div>
+      <div><label>购买链接</label><input type="url" id="p.buy" value="${esc(p.buy||'')}"></div>
+      <div><label>牌组名 deckName</label><input type="text" id="p.deckName" value="${esc(p.deckName||'')}"></div>
+      <div><label>匹配关键词 match（逗号分隔）</label><input type="text" id="p.match" value="${esc((p.match||[]).join(','))}"></div>
+      <div><label>版本 version</label><input type="text" id="p.version" value="${esc(p.version||'')}"></div>
+      <div><label>更新日期 updated</label><input type="date" id="p.updated" value="${esc(p.updated||'')}"></div>
+    </div>
+    <div style="margin-top:14px"><label>简介 intro（每行一条）</label><textarea id="p.intro">${esc((p.intro||[]).join('\n'))}</textarea></div>
+    <div style="margin-top:14px"><label>描述 desc</label><textarea id="p.desc">${esc(p.desc||'')}</textarea></div>
+    <h3>更新与勘误时间轴 timeline</h3>
+    <div id="pTimeline"></div>
+    <button class="btn-line btn-sm" id="addTl">+ 新增一条记录</button>
+  </div>`
+  const tl = $('pTimeline')
+  ;(p.timeline||[]).forEach(e=> tl.appendChild(tlRow(e)))
+  $('addTl').onclick = ()=> tl.appendChild(tlRow({date:'',type:'update',title:'',items:[]}))
+  $('edCancel').onclick = closeEditor
+  $('edSave').onclick = async ()=>{
+    const np = {
+      id: $('p.id').value.trim(), name: $('p.name').value.trim(),
+      category: $('p.category').value, icon: $('p.icon').value.trim(),
+      tags: $('p.tags').value.split(',').map(s=>s.trim()).filter(Boolean),
+      meta: $('p.meta').value.trim(), desc: $('p.desc').value.trim(),
+      price: $('p.price').value.trim(), buy: $('p.buy').value.trim() || null,
+      deckName: $('p.deckName').value.trim(), match: $('p.match').value.split(',').map(s=>s.trim()).filter(Boolean),
+      version: $('p.version').value.trim() || null, updated: $('p.updated').value || null,
+      intro: $('p.intro').value.split('\n').map(s=>s.trim()).filter(Boolean),
+      timeline: [...tl.children].map(r=>{
+        const ins = r.querySelectorAll('input,textarea,select')
+        return { date: ins[0].value, type: ins[1].value, title: ins[2].value, items: ins[3].value.split('\n').map(s=>s.trim()).filter(Boolean) }
+      }).filter(e=> e.date && e.title)
+    }
+    if (!np.id || !np.name){ toast('ID 与名称必填', true); return }
+    if (!id && PRODUCTS.products.some(x=>x.id===np.id)){ toast('ID 已存在', true); return }
+    if (id) PRODUCTS.products = PRODUCTS.products.map(x=> x.id===id? np : x)
+    else PRODUCTS.products.push(np)
+    const r = await saveProducts()
+    if (r.ok){ closeEditor(); renderProducts(); toast('商品已保存') } else toast('保存失败：'+r.msg, true)
+  }
+}
+function tlRow(e){
+  const d = document.createElement('div'); d.className='tl-item'
+  d.innerHTML = `<div class="tl-head">
+    <input type="date" value="${esc(e.date||'')}" placeholder="日期">
+    <select><option value="update" ${e.type==='update'?'selected':''}>更新</option><option value="errata" ${e.type==='errata'?'selected':''}>勘误</option><option value="mixed" ${e.type==='mixed'?'selected':''}>更新/勘误</option></select>
+    <input type="text" value="${esc(e.title||'')}" placeholder="标题，如 3.2.0 发布">
+    <button class="btn-line btn-sm">删除</button></div>
+    <textarea placeholder="每条内容一行">${esc((e.items||[]).join('\n'))}</textarea>`
+  d.querySelector('.tl-head button').onclick = ()=> d.remove()
+  return d
+}
+function closeEditor(){ $('productEditor').style.display='none'; $('productsList').style.display='block'; $('productEditor').innerHTML='' }
+async function saveProducts(){
+  const r = await apiPut('products', PRODUCTS)
+  if (r.ok) PRODUCTS = r.saved || PRODUCTS // 服务端返回最新（此处直接沿用本地）
+  return r
+}
+
+// ---------- 通知管理 ----------
+function renderNotif(){
+  const box = $('notifList')
+  if (!NOTIF.items.length){ box.innerHTML = '<div class="empty">暂无通知</div>'; return }
+  const lvText = {info:'通知',success:'好消息',warning:'提示',danger:'重要'}
+  box.innerHTML = `<div class="card"><table>
+    <thead><tr><th>级别</th><th>标题</th><th>内容</th><th>状态</th><th>操作</th></tr></thead>
+    <tbody>${NOTIF.items.map(n=>`<tr>
+      <td><span class="level-${n.level}">${lvText[n.level]||n.level}</span></td>
+      <td>${esc(n.title)}</td><td>${esc((n.text||'').slice(0,40))}${(n.text||'').length>40?'…':''}</td>
+      <td>${n.active===false?'<span class="level-danger">隐藏</span>':'<span class="level-success">展示中</span>'}</td>
+      <td class="row-actions"><button class="btn-line btn-sm" data-edit="${n.id}">编辑</button>
+      <button class="btn-red btn-sm" data-del="${n.id}">删除</button></td></tr>`).join('')}</tbody></table></div>`
+  box.querySelectorAll('[data-edit]').forEach(b=> b.onclick = ()=> openNotifEditor(b.dataset.edit))
+  box.querySelectorAll('[data-del]').forEach(b=> b.onclick = async ()=>{
+    if (!confirm('确认删除该通知？')) return
+    NOTIF.items = NOTIF.items.filter(x=> x.id !== b.dataset.del)
+    await saveNotif(); renderNotif(); toast('已删除')
+  })
+}
+function openNotifEditor(id){
+  $('notifList').style.display='none'
+  const ed = $('notifEditor'); ed.style.display='block'
+  const n = id ? JSON.parse(JSON.stringify(NOTIF.items.find(x=>x.id===id))) :
+    { id:'n'+Date.now(), level:'info', title:'', text:'', link:'', linkText:'', active:true, start:'', end:'' }
+  ed.innerHTML = `<div class="editor"><div class="ed-head"><h2>${id?'编辑通知':'新增通知'}</h2><div class="spacer"></div>
+      <button class="btn-line btn-sm" id="nCancel">返回</button>
+      <button class="btn-red btn-sm" id="nSave" style="margin-left:8px">保存</button></div>
+    <div class="grid2">
+      <div><label>ID（唯一）</label><input type="text" id="n.id" value="${esc(n.id)}" ${id?'readonly':''}></div>
+      <div><label>级别</label><select id="n.level">
+        <option value="info" ${n.level==='info'?'selected':''}>通知</option>
+        <option value="success" ${n.level==='success'?'selected':''}>好消息</option>
+        <option value="warning" ${n.level==='warning'?'selected':''}>提示</option>
+        <option value="danger" ${n.level==='danger'?'selected':''}>重要</option></select></div>
+      <div><label>标题</label><input type="text" id="n.title" value="${esc(n.title)}"></div>
+      <div><label>链接文字（留空=查看详情）</label><input type="text" id="n.linkText" value="${esc(n.linkText||'')}"></div>
+      <div><label>链接 URL</label><input type="url" id="n.link" value="${esc(n.link||'')}"></div>
+      <div><label>开始日期（留空=立即）</label><input type="date" id="n.start" value="${esc(n.start||'')}"></div>
+      <div><label>结束日期（留空=长期）</label><input type="date" id="n.end" value="${esc(n.end||'')}"></div>
+      <div style="display:flex;align-items:flex-end"><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="n.active" ${n.active!==false?'checked':''} style="width:auto"> 展示该通知</label></div>
+    </div>
+    <div style="margin-top:14px"><label>内容 text</label><textarea id="n.text">${esc(n.text||'')}</textarea></div>
+  </div>`
+  $('nCancel').onclick = closeNotif
+  $('nSave').onclick = async ()=>{
+    const nn = {
+      id: $('n.id').value.trim(), level: $('n.level').value, title: $('n.title').value.trim(),
+      text: $('n.text').value.trim(), link: $('n.link').value.trim()||'', linkText: $('n.linkText').value.trim(),
+      active: $('n.active').checked, start: $('n.start').value||'', end: $('n.end').value||''
+    }
+    if (!nn.id || !nn.title){ toast('ID 与标题必填', true); return }
+    if (id) NOTIF.items = NOTIF.items.map(x=> x.id===id? nn : x)
+    else NOTIF.items.push(nn)
+    const r = await saveNotif(); if (r.ok){ closeNotif(); renderNotif(); toast('通知已保存') } else toast('保存失败：'+r.msg, true)
+  }
+}
+function closeNotif(){ $('notifEditor').style.display='none'; $('notifList').style.display='block'; $('notifEditor').innerHTML='' }
+async function saveNotif(){
+  NOTIF._updated = new Date().toISOString().slice(0,10)
+  return await apiPut('notifications', NOTIF)
+}
+
+// ---------- 更新与勘误视图 ----------
+function renderLogs(){
+  const box = $('logsView')
+  if (!PRODUCTS.products.length){ box.innerHTML='<div class="empty">加载中…</div>'; return }
+  box.innerHTML = PRODUCTS.products.map(p=>{
+    const items = (p.timeline||[]).slice().sort((a,b)=> a.date<b.date?1:-1).map(e=>`
+      <li><span class="level-${e.type==='errata'?'danger':e.type==='mixed'?'info':'success'}">[${e.type==='errata'?'勘误':e.type==='mixed'?'更新/勘误':'更新'}]</span>
+      <b>${esc(e.date)}</b> ${esc(e.title)}
+      ${e.items&&e.items.length?`<br><span style="color:var(--ink2);font-size:13px">${esc(e.items.slice(0,2).join('；'))}${e.items.length>2?' …':''}</span>`:''}</li>`).join('') || '<li style="color:var(--ink2)">暂无记录</li>'
+    return `<div class="card"><h2>${esc(p.icon||'')} ${esc(p.name)} <span style="font-size:13px;color:var(--ink2)">（${esc(catLabel(p.category))}）</span></h2>
+      <ul style="line-height:2;padding-left:18px">${items}</ul>
+      <button class="btn-line btn-sm" data-go="${p.id}">去编辑该商品时间轴 →</button></div>`
+  }).join('')
+  box.querySelectorAll('[data-go]').forEach(b=> b.onclick = ()=>{
+    document.querySelector('nav.tabs button[data-tab="products"]').click()
+    openProductEditor(b.dataset.go)
+  })
+}
+
+// ---------- 顶部操作 ----------
+$('btnRegen').onclick = async ()=>{ setStatus('重新生成中…'); const r = await apiPost('regen'); setStatus(''); toast(r.ok? '已重新生成：'+ (r.msg||'') : '生成失败：'+r.msg, !r.ok); if(r.ok) setTimeout(()=>{location.reload()}, 600) }
+$('btnPublish').onclick = async ()=>{
+  if (!confirm('将把当前改动提交并推送到 GitHub Pages（origin / backup）。确认发布？')) return
+  setStatus('发布中…'); const r = await apiPost('publish'); setStatus(''); toast(r.ok? r.msg : '发布出错：'+r.msg, !r.ok)
+}
+
+// ---------- 工具 ----------
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) }
+
+// ---------- 初始化 ----------
+async function init(){
+  try {
+    SITE = await apiGet('site'); PRODUCTS = await apiGet('products'); NOTIF = await apiGet('notifications')
+    bindSite(); renderProducts(); renderNotif(); renderLogs()
+  } catch(e){ toast('加载失败：'+e.message, true) }
+}
+init()
+</script>
+</body>
+</html>
