@@ -54,10 +54,30 @@ function regenerate() {
 }
 
 // 发布：提交到本地仓库并推送到 origin / backup
+// git 可执行文件解析：Electron 启动器环境 PATH 可能没有 git，逐个探测兜底。
+let gitBin = null
+function gitCmd() {
+  if (gitBin) return gitBin
+  const candidates = [
+    'git',
+    'C:/Users/YAN/.workbuddy/binaries/PortableGit/versions/1.2.0/cmd/git.exe',
+    'C:/Program Files/Git/cmd/git.exe',
+    'C:/Program Files (x86)/Git/cmd/git.exe',
+  ]
+  for (const c of candidates) {
+    try {
+      execFileSync(c, ['--version'], { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] })
+      gitBin = c
+      return c
+    } catch (e) { /* 试下一个 */ }
+  }
+  throw new Error('找不到 git，请安装 Git 或将其加入 PATH')
+}
+
 function publish() {
   const log = []
   const run = (args, cwd = REPO_ROOT) =>
-    execFileSync('git', args, {
+    execFileSync(gitCmd(), args, {
       cwd,
       windowsHide: true,
       stdio: ['ignore', 'pipe', 'pipe'],

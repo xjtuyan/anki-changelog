@@ -218,15 +218,15 @@ document.querySelectorAll('nav.tabs button').forEach(b=>{
 
 // ---------- 网站信息 ----------
 function bindSite(){
-  $('site\\.siteName').value = SITE.siteName || ''
-  $('site\\.title').value = SITE.title || ''
-  $('site\\.domain').value = SITE.domain || ''
-  $('site\\.lang').value = SITE.lang || 'zh-CN'
-  $('site\\.description').value = SITE.description || ''
-  $('site\\.footer.message').value = (SITE.footer||{}).message || ''
-  $('site\\.footer.copyright').value = (SITE.footer||{}).copyright || ''
-  $('site\\.social.taobao').value = ((SITE.social)||{}).taobao || ''
-  $('site\\.social.email').value = ((SITE.social)||{}).email || ''
+  $('site.siteName').value = SITE.siteName || ''
+  $('site.title').value = SITE.title || ''
+  $('site.domain').value = SITE.domain || ''
+  $('site.lang').value = SITE.lang || 'zh-CN'
+  $('site.description').value = SITE.description || ''
+  $('site.footer.message').value = (SITE.footer||{}).message || ''
+  $('site.footer.copyright').value = (SITE.footer||{}).copyright || ''
+  $('site.social.taobao').value = ((SITE.social)||{}).taobao || ''
+  $('site.social.email').value = ((SITE.social)||{}).email || ''
   const wrap = $('siteNav'); wrap.innerHTML = ''
   ;(SITE.nav||[]).forEach((n,i)=> wrap.appendChild(navRow(n,i)))
 }
@@ -244,11 +244,11 @@ $('saveSite').onclick = async ()=>{
     const ins = r.querySelectorAll('input'); return { text: ins[0].value, link: ins[1].value }
   }).filter(n=> n.text && n.link)
   const data = {
-    siteName: $('site\\.siteName').value, title: $('site\\.title').value,
-    domain: $('site\\.domain').value, lang: $('site\\.lang').value || 'zh-CN',
-    description: $('site\\.description').value,
-    footer: { message: $('site\\.footer.message').value, copyright: $('site\\.footer.copyright').value },
-    social: { taobao: $('site\\.social.taobao').value, email: $('site\\.social.email').value },
+    siteName: $('site.siteName').value, title: $('site.title').value,
+    domain: $('site.domain').value, lang: $('site.lang').value || 'zh-CN',
+    description: $('site.description').value,
+    footer: { message: $('site.footer.message').value, copyright: $('site.footer.copyright').value },
+    social: { taobao: $('site.social.taobao').value, email: $('site.social.email').value },
     nav, updatedAt: new Date().toISOString().slice(0,10),
   }
   const r = await apiPut('site', data)
