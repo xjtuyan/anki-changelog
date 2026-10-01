@@ -1,4 +1,5 @@
 ---
+layout: page
 title: COCA tank562 · 长缨记忆卡
 ---
 

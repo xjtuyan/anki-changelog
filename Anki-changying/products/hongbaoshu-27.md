@@ -1,4 +1,5 @@
 ---
+layout: page
 title: 27 红宝书 · 长缨记忆卡
 ---
 
